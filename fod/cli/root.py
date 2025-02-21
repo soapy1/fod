@@ -1,6 +1,7 @@
 import typer
-import os
 
+from fod._fod.models import environment
+from fod._fod.data_dir import DataDir
 
 app = typer.Typer(
     add_completion=False,
@@ -29,20 +30,11 @@ def maybe_checkpoint(
     ),
 ):
     """make a checkpoint if there is a change from the last checkpoint"""
-    pixi_lock = f"{path}/pixi.lock"
-    pyproject_toml = f"{path}/pyproject.toml" 
     print(f"maybe checkpointing path {path}")
-    
-    if os.stat(pixi_lock):
-        print("found pixi lock")
-    else:
-        print("did not find pixi lock!")
-
-    if os.stat(pyproject_toml):
-        print("found pyproject toml")
-    else:
-        print("did not find pyproject toml!")
-
+    env_checkpoint = environment.EnvironmentCheckpoint.from_path(path)
+    prefix = path
+    data_dir = DataDir()
+    data_dir.save_environment_checkpoint(env_checkpoint, prefix)
 
 
 # @app.command()

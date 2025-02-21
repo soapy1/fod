@@ -9,7 +9,7 @@ from fod._fod.models import environment
 def default_data_dir() -> Path:
     dof_dir = os.environ.get("FOD_DIR", None)
     if dof_dir is None:
-        dof_dir = Path.home() / "fod"
+        dof_dir = Path.home() / ".fod"
     else:
         dof_dir = Path(dof_dir)
     
