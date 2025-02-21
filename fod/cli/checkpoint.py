@@ -22,11 +22,15 @@ def list(
         None,
         help="prefix to list checkpoints for"
     ),
+    all: bool = typer.Option(
+        False,
+        help="show all checkpoints for all environments"
+    )
 ):
     """List all checkpoints for the current environment"""
     data_dir = DataDir()
 
-    if path is None:
+    if all:
         checkpoints = data_dir.get_all_environment_checkpoints()
     else:
         checkpoints = {path: data_dir.get_environment_checkpoints(prefix=path)}
