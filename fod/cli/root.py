@@ -2,12 +2,21 @@ import typer
 
 from fod._fod.models import environment
 from fod._fod.data_dir import DataDir
+from fod.cli.checkpoint import checkpoint_command
 
 app = typer.Typer(
     add_completion=False,
     no_args_is_help=True,
     rich_markup_mode="rich",
     context_settings={"help_option_names": ["-h", "--help"]},
+)
+
+
+app.add_typer(
+    checkpoint_command,
+    name="checkpoint",
+    help="create and manage checkpoints",
+    rich_help_panel="Checkpoint",
 )
 
 

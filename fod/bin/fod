@@ -6,12 +6,18 @@ PIXI_BIN="/home/sophia/.pixi/bin/pixi"
 
 # TODO: run pyfod from it's env
 PYFOD_BIN="/home/sophia/miniconda3/envs/fod-dev/bin/pyfod"
-declare -a fod_cmds=("-h" "--help" "checkpoint")
+declare -a fod_cmds=("-h" "--help")
+
+# the pyfod checkpoint command always takes a '--path' argument
+# as the patht the pixi project
+if [ $1 == "checkpoint" ]; then
+    pyfod $args --path $PWD
+    exit 0
+fi
 
 # run pyfod command if a fod subcommand is specified
 for fod_cmd in "${fod_cmds[@]}"
 do
-    echo 
     if [ $fod_cmd == $1 ]; then
         pyfod $args
         exit 0

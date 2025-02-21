@@ -73,6 +73,9 @@ class DataDir:
 
         checkpoints = []
         for file in files:
+            # the latest file is a duplicate, skip 
+            if file == "latest":
+                continue
             with open(os.path.join(target_dir, file), 'r') as file:
                 contents = yaml.safe_load(file)
             
