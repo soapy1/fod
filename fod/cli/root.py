@@ -34,7 +34,7 @@ def maybe_checkpoint(
     # check to see what the latest checkpoint is. Will save this checkpoint
     # if there has been a change
     latest_checkpoint = data_dir.get_latest(path)
-    if latest_checkpoint.environment.lockfile_hash != env_checkpoint.environment.lockfile_hash:
+    if latest_checkpoint is None or latest_checkpoint.environment.lockfile_hash != env_checkpoint.environment.lockfile_hash:
         data_dir.save_environment_checkpoint(env_checkpoint, path, latest=True)
 
 

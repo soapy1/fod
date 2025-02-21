@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List
 import os
 import yaml
 
@@ -28,7 +27,7 @@ class DataDir:
         # Not stoked on this approach. But provides a mapping
         # between a prefix path and folder in a way that doesn't
         # get too long and remains unique
-        name = prefix.replace("/", "-")
+        name = prefix.replace("/", "+")
         return f"{self.data_dir}/{name}"
 
     def delete_environment_checkpoint(self, prefix: str, uuid: str):
@@ -64,10 +63,20 @@ class DataDir:
             target_file = f"{target_dir}/latest"
             with open(target_file, "w+") as file:
                 yaml.dump(checkpoint.model_dump(), file)
-    
-    def get_environment_checkpoints(self, prefix: str) -> List[environment.EnvironmentCheckpoint]:
+
+    def get_environment_checkpoint(self, prefix: str, uuid: str) -> environment.EnvironmentCheckpoint:
         target_dir = self._get_env_dir(prefix)
-        if not os.path.exists(target_dir):
+        target_file = f"{target_dir}/{uuid}"
+        if not os.path.exists(target_file):
+            return None
+        
+        with open(target_file, 'r') as file:
+            contents = yaml.safe_load(file)
+            return environment.EnvironmentCheckpoint.parse_obj(contents)
+    
+    def get_environment_checkpoints(self, prefix: str) -> list[environment.EnvironmentCheckpoint]:
+        target_dir = self._get_env_dir(prefix)
+        if not os.path.isdir(target_dir):
             return []
         files = os.listdir(target_dir)
 
@@ -81,17 +90,37 @@ class DataDir:
             
             checkpoints.append(environment.EnvironmentCheckpoint.parse_obj(contents))
         
+        checkpoints.sort(key=lambda x: x.timestamp, reverse=True)
         return checkpoints
     
-    def get_environment_checkpoint(self, prefix: str, uuid: str) -> environment.EnvironmentCheckpoint:
-        target_dir = self._get_env_dir(prefix)
-        target_file = f"{target_dir}/{uuid}"
-        if not os.path.exists(target_file):
-            return None
+    def get_all_environment_checkpoints(self) -> dict[str, list[environment.EnvironmentCheckpoint]]:
+        """Get a dict of all the saved checkpoints for all environments. The return value 
+        takes the form:
+
+        {
+            <prefix path>: [
+                <environment checkpoints>
+            ],
+            "/home/my/env/location": [
+               environment.EnvironmentCheckpoint("checkpoint1"),
+               environment.EnvironmentCheckpoint("checkpoint1")  
+            ]
+        }
+
+        Returns
+        -------
+        env_checkpoints : dict[str, list[environment.EnvironmentCheckpoint]]
+            Dict of environment path to list of checkpoints for the environment
         
-        with open(target_file, 'r') as file:
-            contents = yaml.safe_load(file)
-            return environment.EnvironmentCheckpoint.parse_obj(contents)
+        """
+        checkpoint_dirs = [path for path in os.listdir(self.data_dir) if os.path.isdir(os.path.join(self.data_dir, path))]
+        
+        env_checkpoints = {}
+        for prefix in checkpoint_dirs:
+            checkpoints = self.get_environment_checkpoints(prefix=prefix)
+            env_checkpoints[prefix] = checkpoints
+
+        return env_checkpoints
         
     def get_latest(self, prefix: str) -> environment.EnvironmentCheckpoint:
         target_dir = self._get_env_dir(prefix)
@@ -99,7 +128,7 @@ class DataDir:
         if not os.path.exists(target_file):
             # TODO: it would be nice if this searched all the checkpoints
             # to determine the latest one, opposed to giving up like this
-            raise Exception("could not find latest checkpoint")
+            return None
         
         with open(target_file, 'r') as file:
             contents = yaml.safe_load(file)
