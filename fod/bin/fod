@@ -3,6 +3,8 @@
 args="$@"
 
 PIXI_BIN="/home/sophia/.pixi/bin/pixi"
+
+# TODO: run pyfod from it's env
 PYFOD_BIN="/home/sophia/miniconda3/envs/fod-dev/bin/pyfod"
 declare -a fod_cmds=("-h" "--help" "hello" "goodbye" "checkpoint")
 
@@ -11,11 +13,15 @@ for fod_cmd in "${fod_cmds[@]}"
 do
     echo 
     if [ $fod_cmd == $1 ]; then
-        $PYFOD_BIN $args
+        pyfod $args
         exit 0
     fi
 done
 
-# if no fod command is specified, then we'll pass things
-# over to pixi
+# if no fod command is specified, then we'll pass things over to pixi
 $PIXI_BIN $args
+
+# try to make a checkpoint whenever a change happens to a pixi env 
+# assumes that you are using pixi from the project dir
+# $PYFOD maybe-checkpoint --path $PWD
+pyfod maybe-checkpoint --path $PWD

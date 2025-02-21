@@ -1,4 +1,5 @@
 import typer
+import os
 
 
 app = typer.Typer(
@@ -19,6 +20,29 @@ def hello():
 def goodbye():
     """bye?"""
     print("why good byyyyyee?")
+
+
+@app.command()
+def maybe_checkpoint(
+    path: str = typer.Option(
+        help="path to the root pixi env"
+    ),
+):
+    """make a checkpoint if there is a change from the last checkpoint"""
+    pixi_lock = f"{path}/pixi.lock"
+    pyproject_toml = f"{path}/pyproject.toml" 
+    print(f"maybe checkpointing path {path}")
+    
+    if os.stat(pixi_lock):
+        print("found pixi lock")
+    else:
+        print("did not find pixi lock!")
+
+    if os.stat(pyproject_toml):
+        print("found pyproject toml")
+    else:
+        print("did not find pyproject toml!")
+
 
 
 # @app.command()
