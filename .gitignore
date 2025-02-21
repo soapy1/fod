@@ -1,0 +1,38 @@
+# python
+__pycache__
+dist
+build
+*.egg-info
+.pytest_cache
+
+# vagrant
+.vagrant
+
+# yarn / nuxt
+node_modules
+.nuxt
+
+# nix
+.direnv
+**/.DS_Store
+
+# vscode
+.history/
+.vscode/
+*.code-workspace
+
+# playwright
+screenshots
+test-results
+
+# ruff
+.ruff_cache
+
+# MacOS
+**/.DS_Store
+
+/build
+
+*.lockb
+
+notes
