@@ -32,6 +32,7 @@ class EnvironmentCheckpoint(BaseModel):
     """
     environment: EnvironmentSpec
     timestamp: str
+    # TODOL how do you actually create a uuid?
     uuid: str
     tags: list[str]
 

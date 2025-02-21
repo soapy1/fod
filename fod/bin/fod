@@ -15,6 +15,11 @@ if [[ $1 == "checkpoint" && $2 == "list" ]]; then
     exit 0
 fi
 
+if [[ $1 == "checkpoint" && $2 == "push" ]]; then
+    pyfod $args --path $PWD
+    exit 0
+fi
+
 # run pyfod command if a fod subcommand is specified
 for fod_cmd in "${fod_cmds[@]}"
 do
