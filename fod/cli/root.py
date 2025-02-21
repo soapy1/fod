@@ -30,11 +30,15 @@ def maybe_checkpoint(
     ),
 ):
     """make a checkpoint if there is a change from the last checkpoint"""
-    print(f"maybe checkpointing path {path}")
     env_checkpoint = environment.EnvironmentCheckpoint.from_path(path)
-    prefix = path
+    
     data_dir = DataDir()
-    data_dir.save_environment_checkpoint(env_checkpoint, prefix)
+
+    # check to see what the latest checkpoint is. Will save this checkpoint
+    # if there has been a change
+    latest_checkpoint = data_dir.get_latest(path)
+    if latest_checkpoint.environment.lockfile_hash != env_checkpoint.environment.lockfile_hash:
+        data_dir.save_environment_checkpoint(env_checkpoint, path, latest=True)
 
 
 # @app.command()

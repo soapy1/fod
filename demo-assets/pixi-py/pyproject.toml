@@ -21,3 +21,5 @@ pixi_py = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
 black = ">=24.10.0,<25"
+filelock = ">=3.17.0,<4"
+scipy = ">=1.15.2,<2"

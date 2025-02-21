@@ -37,13 +37,33 @@ class DataDir:
         if os.path.exists(target_file):
             os.remove(target_file)
 
-    def save_environment_checkpoint(self, checkpoint: environment.EnvironmentCheckpoint, prefix: str):
+    def save_environment_checkpoint(self, checkpoint: environment.EnvironmentCheckpoint, prefix: str, latest: bool = False):
+        """Save an environment checkpoint to a prefix. By default the environment will be saved
+        to <data_dir>/<prefix checkpoint dir>/<uuid>
+        
+        Parameters
+        ----------
+        checkpoint : environment.EnvironmentCheckpoint
+            checkpoint to save
+        
+        prefix : str
+            prefix that the environment belongs to
+
+        latest : bool
+            if set to true, will additionally save a version of the checkpoint to 
+            the name 'latest'
+        """
         target_dir = self._get_env_dir(prefix)
         ensure_dir(target_dir)
         
         target_file = f"{target_dir}/{checkpoint.uuid}"
         with open(target_file, "w+") as file:
             yaml.dump(checkpoint.model_dump(), file)
+
+        if latest:
+            target_file = f"{target_dir}/latest"
+            with open(target_file, "w+") as file:
+                yaml.dump(checkpoint.model_dump(), file)
     
     def get_environment_checkpoints(self, prefix: str) -> List[environment.EnvironmentCheckpoint]:
         target_dir = self._get_env_dir(prefix)
@@ -65,6 +85,18 @@ class DataDir:
         target_file = f"{target_dir}/{uuid}"
         if not os.path.exists(target_file):
             return None
+        
+        with open(target_file, 'r') as file:
+            contents = yaml.safe_load(file)
+            return environment.EnvironmentCheckpoint.parse_obj(contents)
+        
+    def get_latest(self, prefix: str) -> environment.EnvironmentCheckpoint:
+        target_dir = self._get_env_dir(prefix)
+        target_file = f"{target_dir}/latest"
+        if not os.path.exists(target_file):
+            # TODO: it would be nice if this searched all the checkpoints
+            # to determine the latest one, opposed to giving up like this
+            raise Exception("could not find latest checkpoint")
         
         with open(target_file, 'r') as file:
             contents = yaml.safe_load(file)
