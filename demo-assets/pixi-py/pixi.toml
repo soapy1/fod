@@ -1,0 +1,12 @@
+[project]
+authors = ["sophia <scastellarin@quansight.com>"]
+channels = ["conda-forge"]
+description = "Add a short description here"
+name = "tt"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+filelock = ">=3.17.0,<4"

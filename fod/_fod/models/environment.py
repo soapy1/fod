@@ -9,7 +9,7 @@ class EnvironmentSpec(BaseModel):
     """Specifies a locked environment from pixi
 
     spec : str
-      The pyproject.toml for the environemnt
+      The pixi.toml for the environemnt
     
     lockifle : str
       The pixi.lock for the environment
@@ -38,7 +38,7 @@ class EnvironmentCheckpoint(BaseModel):
     @classmethod
     def from_path(cls, path: str):
         pixi_lock_path = f"{path}/pixi.lock"
-        pyproject_toml_path = f"{path}/pyproject.toml" 
+        pyproject_toml_path = f"{path}/pixi.toml" 
         if not os.stat(pixi_lock_path):
           raise Exception("did not find pixi lock")
         if not os.stat(pyproject_toml_path):

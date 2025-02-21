@@ -19,6 +19,8 @@ Add the `fod` bin directory to path
 $ export PATH="$pwd/fod/bin:$PATH"
 ```
 
+Make sure to also install [pixi](https://pixi.sh/)
+
 ## Try it out
 
 Use the pixi environment provided in the `demo-assets/pixi-py` directory.
@@ -44,4 +46,8 @@ $ fod checkpoint list
 │ 306aebf1 │ ['306aebf1'] │ 2025-02-21 18:02:59.879622+00:00 │
 │ 6d7455ad │ ['6d7455ad'] │ 2025-02-21 18:01:30.833781+00:00 │
 └──────────┴──────────────┴──────────────────────────────────┘
+
+# try installing a checkpoint to another dir
+$ cd ..
+$ fod checkpoint install --target ./new-env --uuid 401a162b
 ```
