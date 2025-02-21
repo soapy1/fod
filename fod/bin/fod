@@ -6,7 +6,7 @@ PIXI_BIN="/home/sophia/.pixi/bin/pixi"
 
 # TODO: run pyfod from it's env
 PYFOD_BIN="/home/sophia/miniconda3/envs/fod-dev/bin/pyfod"
-declare -a fod_cmds=("-h" "--help" "hello" "goodbye" "checkpoint")
+declare -a fod_cmds=("-h" "--help" "checkpoint")
 
 # run pyfod command if a fod subcommand is specified
 for fod_cmd in "${fod_cmds[@]}"

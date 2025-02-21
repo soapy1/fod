@@ -12,18 +12,6 @@ app = typer.Typer(
 
 
 @app.command()
-def hello():
-    """Hello?"""
-    print("why, hellooooooo")
-
-
-@app.command()
-def goodbye():
-    """bye?"""
-    print("why good byyyyyee?")
-
-
-@app.command()
 def maybe_checkpoint(
     path: str = typer.Option(
         help="path to the root pixi env"
