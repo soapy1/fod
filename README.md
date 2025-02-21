@@ -13,3 +13,8 @@ $ conda env create -f environment.yml
 
 $ conda activate fod-dev
 ```
+
+Add the `fod` bin directory to path
+```
+$ export PATH="$pwd/fod/bin:$PATH"
+```

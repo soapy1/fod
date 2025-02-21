@@ -28,7 +28,7 @@ Source = "https://github.com/soapy1/fod"
 Issues = "https://github.com/soapy1/fod/issues"
 
 [project.scripts]
-fod = "fod.__main__:main"
+pyfod = "fod.__main__:main"
 
 [tool.black]
 line-length = 88

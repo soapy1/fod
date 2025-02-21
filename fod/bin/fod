@@ -1,0 +1,21 @@
+#!/bin/bash
+
+args="$@"
+
+PIXI_BIN="/home/sophia/.pixi/bin/pixi"
+PYFOD_BIN="/home/sophia/miniconda3/envs/fod-dev/bin/pyfod"
+declare -a fod_cmds=("-h" "--help" "hello" "goodbye" "checkpoint")
+
+# run pyfod command if a fod subcommand is specified
+for fod_cmd in "${fod_cmds[@]}"
+do
+    echo 
+    if [ $fod_cmd == $1 ]; then
+        $PYFOD_BIN $args
+        exit 0
+    fi
+done
+
+# if no fod command is specified, then we'll pass things
+# over to pixi
+$PIXI_BIN $args
