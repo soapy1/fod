@@ -12,11 +12,14 @@ To setup your dev env, create a conda env
 $ conda env create -f environment.yml 
 
 $ conda activate fod-dev
+
+# install fod with pip in editable mode
+$ python -m pip install -e .
 ```
 
 Add the `fod` bin directory to path
 ```
-$ export PATH="$pwd/fod/bin:$PATH"
+$ export PATH="$PWD/fod/bin:$PATH"
 ```
 
 Make sure to also install [pixi](https://pixi.sh/)
@@ -37,7 +40,6 @@ $ fod add scipy
 
 # list available checkpoints
 $ fod checkpoint list
-$ fod checkpoint list   
                          Checkpoints                          
 ┏━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ uuid     ┃ tags         ┃ timestamp                        ┃
